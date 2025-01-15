@@ -18,7 +18,7 @@ class User {
        $this->db = $db;
     }
 
-    public static function create(Database $db, $username, $email, $password, $role = 'student', $status = 'active')
+    public static function create(Database $db, $username, $email, $password, $role, $status)
     {
         $sql = 'INSERT INTO Users (username, email, password, role, status) VALUES (:username, :email , :password, :role, :status)';
         $params = [
@@ -41,7 +41,7 @@ class User {
         $params = [':id' => $id];
         $result = $db->fetch($sql, $params);
         if ($result) {
-            $user = new User($db);
+            $user = new self($db);
             $user->hydrate($result);
             return $user;
         } else {
@@ -94,6 +94,16 @@ class User {
             ':role' => $role,
             ':status' => $status
         ];
+        if ($this->db->query($sql, $params)) {
+            $this->username = $username;
+            $this->email = $email;
+            $this->password = $password;
+            $this->role = $role;
+            $this->status = $status;
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public function updatePassword($password)
@@ -177,3 +187,4 @@ class User {
         }
     }
 }
+
