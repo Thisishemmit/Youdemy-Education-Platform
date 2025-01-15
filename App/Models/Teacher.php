@@ -34,4 +34,50 @@ class Teacher extends User {
         $result = $this->db->fetch($sql, $params);
         return $result[0] > 0;
     }
+
+    public static function loadById(Database $db, $id) {
+        $sql = 'SELECT * FROM Users WHERE id = :id AND role = "teacher"';
+        $params = [':id' => $id];
+        $result = $db->fetch($sql, $params);
+        if ($result) {
+            $teacher = new self($db);
+            $teacher->hydrate($result);
+            return $teacher;
+        } else {
+            return false;
+        }
+    }
+
+    public static function loadByEmail(Database $db, $email) {
+
+        $sql = 'SELECT * FROM Users WHERE email = :email AND role = "teacher"';
+        $params = [':email' => $email];
+        $result = $db->fetch($sql, $params);
+
+        if ($result) {
+            $teacher = new self($db);
+            $teacher->hydrate($result);
+            return $teacher;
+        } else {
+            return false;
+        }
+    }
+
+    public static function all(Database $db) {
+        $sql = 'SELECT * FROM Users WHERE role = "teacher"';
+        $result = $db->fetchAll($sql);
+        if ($result) {
+            $teachers = [];
+            foreach ($result as $teacher) {
+                $t = new self($db);
+                $t->hydrate($teacher);
+                $teachers[] = $t;
+            }
+            return $teachers;
+        } else {
+            return false;
+        }
+    }
 }
+
+
