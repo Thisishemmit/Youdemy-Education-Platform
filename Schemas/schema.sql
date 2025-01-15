@@ -28,6 +28,7 @@ CREATE TABLE IF NOT EXISTS Courses (
     description TEXT,
     category_id INT NOT NULL,
     is_published BOOLEAN DEFAULT false,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY(teacher_id) REFERENCES Users(id) ON DELETE CASCADE ON UPDATE CASCADE,

@@ -57,4 +57,23 @@ class Student extends User {
             return false;
         }
     }
+
+    public static function allByCourse(Database $db, $course_id) {
+        $sql = 'SELECT Users.* from Users
+                JOIN Enrollments ON Users.id = Enrollments.student_id
+                WHERE Enrollments.course_id = :course_id';
+        $params = [':course_id' => $course_id];
+        $result = $db->fetchAll($sql, $params);
+        if ($result) {
+            $students = [];
+            foreach ($result as $student) {
+                $t = new self($db);
+                $t->hydrate($student);
+                $students[] = $t;
+            }
+            return $students;
+        } else {
+            return false;
+        }
+    }
 }
