@@ -1,4 +1,3 @@
-
 <?php
 
 namespace Helpers;
@@ -22,7 +21,7 @@ class Database
     public function __construct(
         $username = 'root',
         $password = '',
-        $dbname = 'bank',
+        $dbname = 'Youdemy',
         $host = 'localhost'
     ) {
         $this->username = $username;
