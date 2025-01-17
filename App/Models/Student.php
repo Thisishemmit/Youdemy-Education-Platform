@@ -18,7 +18,7 @@ class Student extends User {
         $sql = 'SELECT * FROM Users WHERE id = :id AND role = "student"';
         $params = [':id' => $id];
         $result = $db->fetch($sql, $params);
-        if ($result) {
+        if ($result !== false) {
             $student = new self($db);
             $student->hydrate($result);
             return $student;
@@ -33,7 +33,7 @@ class Student extends User {
         $params = [':email' => $email];
         $result = $db->fetch($sql, $params);
 
-        if ($result) {
+        if ($result !== false) {
             $student = new self($db);
             $student->hydrate($result);
             return $student;
@@ -45,7 +45,7 @@ class Student extends User {
     public static function all(Database $db) {
         $sql = 'SELECT * FROM Users WHERE role = "student"';
         $result = $db->fetchAll($sql);
-        if ($result) {
+        if ($result !== false) {
             $students = [];
             foreach ($result as $student) {
                 $t = new self($db);
@@ -57,6 +57,11 @@ class Student extends User {
             return false;
         }
     }
+<<<<<<< Updated upstream
+=======
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
 
     public static function allByCourse(Database $db, $course_id) {
         $sql = 'SELECT Users.* from Users
@@ -64,7 +69,11 @@ class Student extends User {
                 WHERE Enrollments.course_id = :course_id';
         $params = [':course_id' => $course_id];
         $result = $db->fetchAll($sql, $params);
+<<<<<<< Updated upstream
         if ($result) {
+=======
+        if ($result !== false) {
+>>>>>>> Stashed changes
             $students = [];
             foreach ($result as $student) {
                 $t = new self($db);
@@ -76,4 +85,8 @@ class Student extends User {
             return false;
         }
     }
+<<<<<<< Updated upstream
+=======
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 }

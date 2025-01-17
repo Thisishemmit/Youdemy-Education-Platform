@@ -1,7 +1,19 @@
 <?php
+
 namespace Core;
+
+use Helpers\Database;
+
 class BaseController
 {
+    protected $db;
+
+    public function __construct()
+    {
+        $this->db = new Database();
+        $this->db->connect();
+    }
+
     protected function render(string $view, array $data = []): void
     {
         $viewPath = "../App/Views/{$view}.php";
@@ -36,4 +48,3 @@ class BaseController
         return isset($_SESSION[$flashName]);
     }
 }
-
