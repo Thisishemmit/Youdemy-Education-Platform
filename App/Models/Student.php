@@ -1,15 +1,19 @@
 <?php
+
 namespace App\Models;
 
 use Helpers\Database;
 use App\Models\User;
 
-class Student extends User {
-    public function __construct(Database $db) {
+class Student extends User
+{
+    public function __construct(Database $db)
+    {
         parent::__construct($db);
     }
 
-    public static function create(Database $db, $username, $email, $password, $role = 'student', $status = 'active') {
+    public static function create(Database $db, $username, $email, $password, $role = 'student', $status = 'active')
+    {
         return User::create($db, $username, $email, $password, $role, $status);
     }
 
@@ -42,7 +46,8 @@ class Student extends User {
         }
     }
 
-    public static function all(Database $db) {
+    public static function all(Database $db)
+    {
         $sql = 'SELECT * FROM Users WHERE role = "student"';
         $result = $db->fetchAll($sql);
         if ($result !== false) {
@@ -57,23 +62,16 @@ class Student extends User {
             return false;
         }
     }
-<<<<<<< Updated upstream
-=======
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
 
-    public static function allByCourse(Database $db, $course_id) {
+    public static function allByCourse(Database $db, $course_id)
+    {
         $sql = 'SELECT Users.* from Users
                 JOIN Enrollments ON Users.id = Enrollments.student_id
                 WHERE Enrollments.course_id = :course_id';
         $params = [':course_id' => $course_id];
         $result = $db->fetchAll($sql, $params);
-<<<<<<< Updated upstream
-        if ($result) {
-=======
+
         if ($result !== false) {
->>>>>>> Stashed changes
             $students = [];
             foreach ($result as $student) {
                 $t = new self($db);
@@ -85,8 +83,4 @@ class Student extends User {
             return false;
         }
     }
-<<<<<<< Updated upstream
-=======
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 }
