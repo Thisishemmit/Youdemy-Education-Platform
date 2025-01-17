@@ -47,7 +47,39 @@ class User {
         } else {
             return false;
         }
+    }
 
+    public function getStatus(){
+        return $this->status;
+    }
+    public function getCreatedAt(){
+        return $this->created_at;
+    }
+    public function getUpdatedAt(){
+        return $this->updated_at;
+    }
+    public function getEmail(){
+        return $this->email;
+    }
+    public function getPassword(){
+        return $this->password;
+    }
+
+    public function getCourses(){
+        $courses = Course::allByTeacher($this->db, $this->id);
+        return $courses;
+    }
+    public static function loadByEmail(Database $db, $email){
+        $sql = 'SELECT * FROM Users WHERE email = :email';
+        $params = [':email' => $email];
+        $result = $db->fetch($sql, $params);
+        if ($result) {
+            $user = new self($db);
+            $user->hydrate($result);
+            return $user;
+        } else {
+            return false;
+        }
     }
 
     protected function hydrate($data)
@@ -182,6 +214,28 @@ class User {
                 $this->status = 'active';
                 return true;
             }
+        } else {
+            return false;
+        }
+    }
+
+    public function getId() {
+        return $this->id;
+    }
+
+    public function getRole(){
+        return $this->role;
+    }
+
+    public function getUserName(){
+        return $this->username;
+    }
+
+    public static function count(Database $db){
+        $sql = 'SELECT COUNT(*) FROM Users';
+        $result = $db->fetch($sql);
+        if ($result) {
+            return $result['COUNT(*)'];
         } else {
             return false;
         }

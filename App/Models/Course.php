@@ -1,6 +1,10 @@
 <?php
 
+<<<<<<< Updated upstream
 namespace Core\Models;
+=======
+namespace App\Models;
+>>>>>>> Stashed changes
 
 use Helpers\Database;
 use App\Models\Student;
@@ -49,7 +53,11 @@ class Course
         $sql = 'SELECT * FROM Courses WHERE id = :id';
         $params = [':id' => $id];
         $result = $db->fetch($sql, $params);
+<<<<<<< Updated upstream
         if ($result) {
+=======
+        if ($result !== false) {
+>>>>>>> Stashed changes
             $course = new self($db);
             $course->hydrate($result);
             return $course;
@@ -75,7 +83,11 @@ class Course
     {
         $sql = 'SELECT * FROM Courses';
         $result = $db->fetchAll($sql);
+<<<<<<< Updated upstream
         if ($result) {
+=======
+        if ($result !== false) {
+>>>>>>> Stashed changes
             $courses = [];
             foreach ($result as $course) {
                 $c = new self($db);
@@ -93,7 +105,11 @@ class Course
         $sql = 'SELECT * FROM Courses WHERE teacher_id = :teacher_id';
         $params = [':teacher_id' => $teacher_id];
         $result = $db->fetchAll($sql, $params);
+<<<<<<< Updated upstream
         if ($result) {
+=======
+        if ($result !== false) {
+>>>>>>> Stashed changes
             $courses = [];
             foreach ($result as $course) {
                 $c = new self($db);
@@ -106,13 +122,22 @@ class Course
         }
     }
 
+<<<<<<< Updated upstream
     public static function allByStudent(Database $db, $student_id){
+=======
+    public static function allByStudent(Database $db, $student_id)
+    {
+>>>>>>> Stashed changes
         $sql = 'SELECT Courses.* from Courses
                 JOIN Enrollments ON Courses.id = Enrollments.course_id
                 WHERE Enrollments.student_id = :student_id';
         $params = [':student_id' => $student_id];
         $result = $db->fetchAll($sql, $params);
+<<<<<<< Updated upstream
         if ($result) {
+=======
+        if ($result !== false) {
+>>>>>>> Stashed changes
             $courses = [];
             foreach ($result as $course) {
                 $c = new self($db);
@@ -125,6 +150,26 @@ class Course
         }
     }
 
+<<<<<<< Updated upstream
+=======
+    public static function allPublished(Database $db)
+    {
+        $sql = 'SELECT * FROM Courses WHERE is_published = true';
+        $results = $db->fetchAll($sql);
+        if ($results !== false) {
+            $courses = [];
+            foreach ($results as $data) {
+                $course = new Course($db);
+                $course->hydrate($data);
+                $courses[] = $course;
+            }
+            return $courses;
+        } else {
+            return false;
+        }
+    }
+
+>>>>>>> Stashed changes
     public function isPublished()
     {
         return $this->is_published;
