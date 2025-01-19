@@ -58,8 +58,9 @@ CREATE TABLE IF NOT EXISTS videos (
 
 CREATE TABLE IF NOT EXISTS Documents (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    file_size INT NOT NULL,
     content_id INT NOT NULL,
+    file_size INT NOT NULL,
+    file_ext VARCHAR(10) NOT NULL,
     FOREIGN KEY(content_id) REFERENCES Contents(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
