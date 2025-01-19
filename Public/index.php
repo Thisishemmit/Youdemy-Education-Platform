@@ -57,6 +57,7 @@ Route::get('/courses/{id}', [CourseController::class, 'viewCourse']);
 Route::get('/teacher', [TeacherController::class, 'dashboard']);
 Route::get('/teacher/courses', [TeacherController::class, 'courses']);
 Route::get('/teacher/courses/create', [TeacherController::class, 'createCoursePage']);
+Route::post('/teacher/courses/create', [TeacherController::class, 'createCourse']);
 Route::get('/teacher/pending', [TeacherController::class, 'pending']);
 
 Route::dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);

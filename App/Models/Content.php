@@ -1,83 +1,118 @@
 <?php
+
 namespace App\Models;
+
 use Helpers\Database;
 
-abstract class Content {
+abstract class Content
+{
     protected $db;
     protected $id;
-    protected $courseId;
-    protected $title;
-    protected $description;
     protected $type;
     protected $path;
-    protected $status;
+    protected $course_id;
+    protected $title;
+    protected $description;
     protected $created_at;
     protected $updated_at;
+    protected $status;
 
-    public function __construct($db) {
+    public function __construct(Database $db)
+    {
         $this->db = $db;
     }
 
+    abstract public static function loadById(Database $db, $id);
+    abstract public static function all(Database $db);
+    abstract public static function allByCourseId(Database $db, $course_id);
+    abstract public function hydrate($data);
+    abstract public function updateStatus($status);
+    abstract public function updateCourseId($course_id);
+    abstract public function updatePath($path);
+    abstract public static function validateType($file);
+    abstract public static function validateSize($file);
 
-    protected static function createContent(Database $db, $courseId, $title, $description, $type, $path) {
-        $sql = "INSERT INTO Contents (course_id, title, description, type, path) VALUES (:course_id, :title, :description, :type, :path)";
+    protected function createContent($course_id, $path, $type, $title, $description)
+    {
+        $sql = 'INSERT INTO Contents (course_id, path, type, title, description) VALUES (:course_id, :path, :type, :title, :description)';
         $params = [
-            ':course_id' => $courseId,
-            ':title' => $title,
-            ':description' => $description,
+            ':course_id' => $course_id,
+            ':path' => $path,
             ':type' => $type,
-            ':path' => $path
+            ':title' => $title,
+            ':description' => $description
         ];
-        if ($db->query($sql, $params)) {
-            return $db->lastInsertId();
-        } else {
-            return false;
+
+        if ($this->db->query($sql, $params)) {
+            return $this->db->lastInsertId();
         }
+        return false;
     }
 
-    abstract static public function load(Database $db, $id);
-    abstract static public function loadAll(Database $db, $courseId);
-    abstract public function hydrate($data);
-
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getCourseId() {
-        return $this->courseId;
+    public function getCourseId()
+    {
+        return $this->course_id;
     }
 
-    public function getTitle() {
-        return $this->title;
-    }
-
-    public function getDescription() {
-        return $this->description;
-    }
-
-    public function getType() {
+    public function getType()
+    {
         return $this->type;
     }
 
-    public function getPath() {
-        return $this->path;
-    }
-
-    public function getStatus() {
-        return $this->status;
-    }
-
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
 
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updated_at;
     }
 
-    public function setStatus($status) {
-        $this->status = $status;
+    public function getStatus()
+    {
+        return $this->status;
     }
 
-}
+    public function getPath()
+    {
+        return $this->path;
+    }
 
+    public function getTitle()
+    {
+        return $this->title;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function updateTitle($title)
+    {
+        $sql = 'UPDATE Contents SET title = :title WHERE id = :id';
+        $params = [':id' => $this->id, ':title' => $title];
+        if ($this->db->query($sql, $params)) {
+            $this->title = $title;
+            return true;
+        }
+        return false;
+    }
+
+    public function updateDescription($description)
+    {
+        $sql = 'UPDATE Contents SET description = :description WHERE id = :id';
+        $params = [':id' => $this->id, ':description' => $description];
+        if ($this->db->query($sql, $params)) {
+            $this->description = $description;
+            return true;
+        }
+        return false;
+    }
+}

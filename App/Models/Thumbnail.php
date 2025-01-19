@@ -76,11 +76,36 @@ class Thumbnail {
     public static function create(Database $db, $courseId, $path) {
         $sql = 'INSERT INTO Thumbnails (course_id, path) VALUES (:course_id, :path)';
         $params = [':course_id' => $courseId, ':path' => $path];
-        
+
         if ($db->query($sql, $params)) {
             return self::loadById($db, $db->lastInsertId());
         }
         return false;
+    }
+
+    public static function upload($file) {
+        $targetDir = 'uploads/thumbnails/';
+        $targetFileName = $targetDir . md5(basename($file['name']) . time()) . '.' . pathinfo($file['name'], PATHINFO_EXTENSION);
+        if (move_uploaded_file($file['tmp_name'], $targetFileName)) {
+            return $targetFileName;
+        } else {
+            return false;
+        }
+    }
+
+    public static function validateTypr($file) {
+        $allowedTypes = ['image/jpeg', 'image/png'];
+        if (!in_array($file['type'], $allowedTypes)) {
+            return false;
+        }
+        return true;
+    }
+
+    public static function validateSize($file) {
+        if ($file['size'] > 1024 * 1024) {
+            return false;
+        }
+        return true;
     }
 }
 
