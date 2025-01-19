@@ -25,7 +25,7 @@ class Course
         $this->db = $db;
     }
 
-    public static function create(Database $db, $title, $description, $teacher_id, $category_id, $is_published = false, $status = 'active')
+    public static function create(Database $db, $title, $description, $teacher_id, $category_id, $is_published = true, $status = 'active')
     {
         $sql = 'INSERT INTO Courses (title, description, teacher_id, category_id, is_published, status) VALUES (:title, :description, :teacher_id, :category_id, :is_published, :status)';
         $params = [
@@ -274,5 +274,14 @@ class Course
     public function getEnrolledStudents()
     {
         return Student::allByCourse($this->db, $this->id);
+    }
+    public function addTag($tagId)
+    {
+        $sql = 'INSERT INTO CourseTags (course_id, tag_id) VALUES (:course_id, :tag_id)';
+        $params = [
+            ':course_id' => $this->id,
+            ':tag_id' => $tagId
+        ];
+        return $this->db->query($sql, $params);
     }
 }
