@@ -41,11 +41,12 @@ class TeacherController extends BaseController
         $this->render('teacher/pending');
     }
 
+    public function createCoursePage(){
+        $this->render('teacher/courses/create');
+    }
     public function createCourse()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
-
-    public function editCourse($id) {}
 }
