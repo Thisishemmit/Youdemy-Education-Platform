@@ -30,6 +30,7 @@ Route::get('/login', [AuthController::class, 'loginPage']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::get('/register', [AuthController::class, 'registerPage']);
 Route::post('/register', [AuthController::class, 'register']);
+Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/logout', [AuthController::class, 'logout']);
 
 // ADMIN ADMIN
@@ -41,7 +42,7 @@ Route::post('/admin/teachers/suspend', [AdminController::class, 'suspendTeacher'
 Route::post('/admin/teachers/reject', [AdminController::class, 'rejectTeacher']);
 Route::post('/admin/teachers/activate', [AdminController::class, 'activateTeacher']);
 
-// Categories and Tags Management
+// Categories and Tags mngmnt
 Route::get('/admin/categories', [AdminController::class, 'categories']);
 Route::post('/admin/categories/create', [AdminController::class, 'createCategory']);
 Route::post('/admin/categories/delete', [AdminController::class, 'deleteCategory']);
@@ -54,6 +55,8 @@ Route::get('/courses', [CourseController::class, 'courses']);
 Route::get('/courses/{id}', [CourseController::class, 'viewCourse']);
 
 Route::get('/teacher', [TeacherController::class, 'dashboard']);
+Route::get('/teacher/courses', [TeacherController::class, 'courses']);
+Route::get('/teacher/courses/create', [TeacherController::class, 'createCoursePage']);
 Route::get('/teacher/pending', [TeacherController::class, 'pending']);
 
 Route::dispatch($_SERVER['REQUEST_URI'], $_SERVER['REQUEST_METHOD']);
