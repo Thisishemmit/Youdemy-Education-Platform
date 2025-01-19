@@ -35,15 +35,32 @@ CREATE TABLE IF NOT EXISTS Courses (
     FOREIGN KEY(category_id) REFERENCES Categories(id) ON DELETE RESTRICT ON UPDATE CASCADE
 );
 
-CREATE TABLE IF NOT EXISTS CourseContent (
+
+CREATE TABLE IF NOT EXISTS Contents(
     id INT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
-    path VARCHAR(255) NOT NULL,
-    type ENUM('video', 'document') NOT NULL,
     course_id INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT,
+    type ENUM('video', 'document') NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    status ENUM('active', 'inactive') DEFAULT 'active',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     FOREIGN KEY(course_id) REFERENCES Courses(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS videos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content_id INT NOT NULL,
+    duration INT NOT NULL,
+    FOREIGN KEY(content_id) REFERENCES Contents(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS Documents (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    file_size INT NOT NULL,
+    content_id INT NOT NULL,
+    FOREIGN KEY(content_id) REFERENCES Contents(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Enrollments (
