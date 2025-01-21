@@ -177,7 +177,7 @@ class Course
 
     public function publish()
     {
-        $sql = 'UPDATE Courses SET is_published = true WHERE id = :id';
+        $sql = 'UPDATE Courses SET is_published = true   WHERE id = :id';
         $params = [':id' => $this->id];
         if ($this->db->query($sql, $params)) {
             $this->is_published = true;

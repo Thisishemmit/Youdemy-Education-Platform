@@ -70,8 +70,8 @@
                             <div class="course-card z-10 relative">
                                 <div class="absolute w-full h-full bg-[#252525] rounded-xl top-2 left-2 ">
                                 </div>
-                                <div class="bg-white rounded-xl relative transition duration-100 flex flex-col hover:top-1 hover:left-1 border-2 border-[#252525]">
-                                    <div class="relative aspect-[16/9] h-48">  <!-- Added fixed height h-48 -->
+                                <div class="bg-white h-full rounded-xl relative transition duration-100 flex flex-col hover:top-1 hover:left-1 border-2 border-[#252525]">
+                                    <div class="relative aspect-[16/9] h-48"> <!-- Added fixed height h-48 -->
                                         <?php
                                         $thumbnail = $course->getThumbnail();
                                         $thumbnailPath = $thumbnail ? $thumbnail->getPath() : '/assets/images/default-course.jpg';
@@ -138,25 +138,25 @@
                     </div>
                 <?php endif; ?>
 
-++                <?php if ($totalPages > 1): ?>
+                <?php if ($totalPages > 1): ?>
                     <div class="mt-8 flex justify-center gap-2">
                         <?php if ($currentPage > 1): ?>
-                            <a href="?page=<?= $currentPage - 1 ?>" 
-                               class="px-4 py-2 bg-white border-2 border-[#252525] rounded-lg hover:bg-gray-50">
+                            <a href="?page=<?= $currentPage - 1 ?>"
+                                class="px-4 py-2 bg-white border-2 border-[#252525] rounded-lg hover:bg-gray-50">
                                 Previous
                             </a>
                         <?php endif; ?>
 
                         <?php for ($i = 1; $i <= $totalPages; $i++): ?>
-                            <a href="?page=<?= $i ?>" 
-                               class="px-4 py-2 <?= $i === $currentPage ? 'bg-[#1fda92] border-2 border-[#252525]' : 'bg-white border-2 border-[#252525]' ?> rounded-lg hover:bg-gray-50">
+                            <a href="?page=<?= $i ?>"
+                                class="px-4 py-2 <?= $i === $currentPage ? 'bg-[#1fda92] border-2 border-[#252525]' : 'bg-white border-2 border-[#252525]' ?> rounded-lg hover:bg-gray-50">
                                 <?= $i ?>
                             </a>
                         <?php endfor; ?>
 
                         <?php if ($currentPage < $totalPages): ?>
-                            <a href="?page=<?= $currentPage + 1 ?>" 
-                               class="px-4 py-2 bg-white border-2 border-[#252525] rounded-lg hover:bg-gray-50">
+                            <a href="?page=<?= $currentPage + 1 ?>"
+                                class="px-4 py-2 bg-white border-2 border-[#252525] rounded-lg hover:bg-gray-50">
                                 Next
                             </a>
                         <?php endif; ?>
