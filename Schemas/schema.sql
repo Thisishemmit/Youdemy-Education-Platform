@@ -1,9 +1,10 @@
+DROP DATABASE IF EXISTS Youdemy;
 CREATE DATABASE IF NOT EXISTS Youdemy;
 USE Youdemy;
 
 CREATE TABLE IF NOT EXISTS Users (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL UNIQUE,
+    username VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     password VARCHAR(255) NOT NULL,
     role ENUM('admin', 'teacher', 'student') DEFAULT 'student',
@@ -47,25 +48,34 @@ CREATE TABLE IF NOT EXISTS Contents (
     FOREIGN KEY(course_id) REFERENCES Courses(id) ON DELETE CASCADE
 );
 
+CREATE TABLE IF NOT EXISTS Thumbnails (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    course_id INT NOT NULL,
+    path VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY(course_id) REFERENCES Courses(id) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS Videos (
-    content_id INT PRIMARY KEY,
-    duration INT, 
-    FOREIGN KEY (content_id) REFERENCES Contents(id) ON DELETE CASCADE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content_id INT NOT NULL,
+    duration INT NOT NULL,
+    FOREIGN KEY(content_id) REFERENCES Contents(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Documents (
-    content_id INT PRIMARY KEY,
-    file_size INT,
-    file_extension VARCHAR(10),
-    FOREIGN KEY (content_id) REFERENCES Contents(id) ON DELETE CASCADE
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    content_id INT NOT NULL,
+    file_size INT NOT NULL,
+    file_ext VARCHAR(10) NOT NULL,
+    FOREIGN KEY(content_id) REFERENCES Contents(id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS Enrollments (
     id INT AUTO_INCREMENT PRIMARY KEY,
     student_id INT NOT NULL,
     course_id INT NOT NULL,
-    status ENUM('enrolled', 'in_progress', 'completed', 'dropped') DEFAULT 'enrolled',
-    progress_percentage INT DEFAULT 0,
     completion_date TIMESTAMP NULL,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

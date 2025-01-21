@@ -31,7 +31,14 @@ abstract class Content
     abstract public function updatePath($path);
     abstract public static function validateType($file);
     abstract public static function validateSize($file);
+    abstract public function delete();
 
+    public function deleteContent()
+    {
+        $sql = 'DELETE FROM Contents WHERE id = :id';
+        $params = [':id' => $this->id];
+        return $this->db->query($sql, $params);
+    }
     protected function createContent($course_id, $path, $type, $title, $description)
     {
         $sql = 'INSERT INTO Contents (course_id, path, type, title, description) VALUES (:course_id, :path, :type, :title, :description)';

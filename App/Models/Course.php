@@ -143,6 +143,33 @@ class Course
         }
     }
 
+    public static function countPublished(Database $db)
+    {
+        $sql = 'SELECT COUNT(*) FROM Courses WHERE is_published = true';
+        $result = $db->fetch($sql);
+        return $result['COUNT(*)'];
+    }
+
+    public static function allPublishedPaginated(Database $db, $limit, $offset)
+    {
+        $sql = 'SELECT * FROM Courses WHERE is_published = true LIMIT :limit OFFSET :offset';
+        $params = [
+            ':limit' => $limit,
+            ':offset' => $offset
+        ];
+        $results = $db->fetchAll($sql, $params);
+        if ($results !== false) {
+            $courses = [];
+            foreach ($results as $data) {
+                $course = new Course($db);
+                $course->hydrate($data);
+                $courses[] = $course;
+            }
+            return $courses;
+        }
+        return false;
+    }
+
     public function isPublished()
     {
         return $this->is_published;
@@ -216,7 +243,7 @@ class Course
         }
     }
 
-    function updatedescription($description)
+    function updateDescription($description)
     {
         $sql = 'UPDATE Courses SET description = :description WHERE id = :id';
         $params = [
@@ -229,6 +256,20 @@ class Course
         } else {
             return false;
         }
+    }
+
+    public function updateCategory($categoryId)
+    {
+        $sql = 'UPDATE Courses SET category_id = :category_id WHERE id = :id';
+        $params = [
+            ':id' => $this->id,
+            ':category_id' => $categoryId
+        ];
+        if ($this->db->query($sql, $params)) {
+            $this->category_id = $categoryId;
+            return true;
+        }
+        return false;
     }
 
     public function getId()
@@ -282,6 +323,46 @@ class Course
             ':course_id' => $this->id,
             ':tag_id' => $tagId
         ];
+        return $this->db->query($sql, $params);
+    }
+
+    public function removeTag($tagId)
+    {
+        $sql = 'DELETE FROM CourseTags WHERE course_id = :course_id AND tag_id = :tag_id';
+        $params = [
+            ':course_id' => $this->id,
+            ':tag_id' => $tagId
+        ];
+        return $this->db->query($sql, $params);
+    }
+
+    public function getThumbnail()
+    {
+        return Thumbnail::loadByCourseId($this->db, $this->id);
+    }
+
+    public function getCategory()
+    {
+        return Category::loadById($this->db, $this->category_id);
+    }
+
+    public function getTags()
+    {
+        return Tag::allByCourseId($this->db, $this->id);
+    }
+
+    public function isStudentEnrolled($student_id)
+    {
+        $sql = 'SELECT COUNT(*) FROM Enrollments WHERE course_id = :course_id AND student_id = :student_id';
+        $params = [':course_id' => $this->id, ':student_id' => $student_id];
+        $result = $this->db->fetch($sql, $params);
+        return $result['COUNT(*)'] > 0;
+    }
+
+    public function delete()
+    {
+        $sql = 'DELETE FROM Courses WHERE id = :id';
+        $params = [':id' => $this->id];
         return $this->db->query($sql, $params);
     }
 }

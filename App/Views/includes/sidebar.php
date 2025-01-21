@@ -1,4 +1,5 @@
 <?php
+
 use Core\Auth;
 
 $role = Auth::user()->getRole();
@@ -58,12 +59,6 @@ $menuItems = [
             'active' => str_contains($currentPath, '/teacher/courses')
         ],
         [
-            'title' => 'Students',
-            'icon' => 'users',
-            'url' => '/teacher/students',
-            'active' => str_contains($currentPath, '/teacher/students')
-        ],
-        [
             'title' => 'Analytics',
             'icon' => 'bar-chart',
             'url' => '/teacher/analytics',
@@ -83,18 +78,6 @@ $menuItems = [
             'url' => '/student/courses',
             'active' => str_contains($currentPath, '/student/courses')
         ],
-        [
-            'title' => 'Progress',
-            'icon' => 'activity',
-            'url' => '/student/progress',
-            'active' => str_contains($currentPath, '/student/progress')
-        ],
-        [
-            'title' => 'Certificates',
-            'icon' => 'award',
-            'url' => '/student/certificates',
-            'active' => str_contains($currentPath, '/student/certificates')
-        ]
     ]
 ];
 
@@ -109,8 +92,8 @@ $currentMenuItems = $menuItems[$role] ?? [];
 
         <nav>
             <?php foreach ($currentMenuItems as $item): ?>
-                <a href="<?php echo $item['url']; ?>" 
-                   class="flex items-center space-x-2 p-2 rounded-lg mb-1 <?php echo $item['active'] ? 'bg-[#1fda92] text-[#252525]' : 'hover:bg-white/10'; ?>">
+                <a href="<?php echo $item['url']; ?>"
+                    class="flex items-center space-x-2 p-2 rounded-lg mb-1 <?php echo $item['active'] ? 'bg-[#1fda92] text-[#252525]' : 'hover:bg-white/10'; ?>">
                     <i data-lucide="<?php echo $item['icon']; ?>" class="w-5 h-5"></i>
                     <span><?php echo $item['title']; ?></span>
                 </a>

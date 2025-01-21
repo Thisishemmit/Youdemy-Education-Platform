@@ -6,6 +6,8 @@ use Core\BaseController;
 use Core\Auth;
 use App\Models\Teacher;
 use App\Models\Category;
+use App\Models\Course;
+use App\Models\Student;
 use App\Models\Tag;
 
 class AdminController extends BaseController
@@ -18,7 +20,17 @@ class AdminController extends BaseController
 
     public function dashboard()
     {
-        return $this->render('admin/dashboard');
+        $totalTeachers = count(Teacher::all($this->db));
+        $totalStudents = count(Student::all($this->db));
+        $totalCourses = count(Course::all($this->db));
+        $pendingTeachers = count(Teacher::allByStatus($this->db, 'pending'));
+
+        return $this->render('admin/dashboard', [
+            'totalTeachers' => $totalTeachers,
+            'totalStudents' => $totalStudents,
+            'totalCourses' => $totalCourses,
+            'pendingTeachers' => $pendingTeachers
+        ]);
     }
 
     public function teachers()
@@ -235,6 +247,113 @@ class AdminController extends BaseController
         header('Location: /admin/tags');
         exit;
     }
+
+    public function students()
+    {
+        $students = Student::all($this->db);
+        return $this->render('admin/students', [
+            'students' => $students,
+        ]);
+    }
+
+    public function activateStudent()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $studentId = $_POST['student_id'] ?? null;
+            if ($studentId) {
+                $student = Student::loadById($this->db, $studentId);
+                if ($student) {
+                    if ($student->canBeActivated()) {
+                        if ($student->activate()) {
+                            $this->setFlash('/admin/students', 'Student activated successfully', 'success');
+                        } else {
+                            $this->setFlash('/admin/students', 'Failed to activate student', 'error');
+                        }
+                    } else {
+                        $this->setFlash('/admin/students', 'Student cannot be activated in their current status', 'error');
+                    }
+                } else {
+                    $this->setFlash('/admin/students', 'Student not found', 'error');
+                }
+            }
+        }
+        header('Location: /admin/students');
+        exit;
+    }
+
+    public function suspendStudent()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $studentId = $_POST['student_id'] ?? null;
+            if ($studentId) {
+                $student = Student::loadById($this->db, $studentId);
+                if ($student) {
+                    if ($student->canBeSuspended()) {
+                        if ($student->suspend()) {
+                            $this->setFlash('/admin/students', 'Student suspended successfully', 'success');
+                        } else {
+                            $this->setFlash('/admin/students', 'Failed to suspend student', 'error');
+                        }
+                    } else {
+                        $this->setFlash('/admin/students', 'Student cannot be suspended in their current status', 'error');
+                    }
+                } else {
+                    $this->setFlash('/admin/students', 'Student not found', 'error');
+                }
+            }
+        }
+        header('Location: /admin/students');
+        exit;
+    }
+
+    public function courses()
+    {
+        $courses = Course::all($this->db);
+        $activeCount = 0;
+        foreach ($courses as $course) {
+            if ($course->isActive()) $activeCount++;
+        }
+
+        return $this->render('admin/courses', [
+            'courses' => $courses,
+            'activeCount' => $activeCount
+        ]);
+    }
+
+    public function toggleCourseStatus($id)
+    {
+        $course = Course::loadById($this->db, $id);
+        if ($course) {
+            if ($course->isActive()) {
+                if ($course->deactivate()) {
+                    $this->setFlash('/admin/courses', 'Course deactivated successfully', 'success');
+                } else {
+                    $this->setFlash('/admin/courses', 'Failed to deactivate course', 'error');
+                }
+            } else {
+                if ($course->activate()) {
+                    $this->setFlash('/admin/courses', 'Course activated successfully', 'success');
+                } else {
+                    $this->setFlash('/admin/courses', 'Failed to activate course', 'error');
+                }
+            }
+        }
+        header('Location: /admin/courses');
+        exit;
+    }
+
+    public function deleteStudent($id)
+    {
+        $student = Student::loadById($this->db, $id);
+        if ($student && $student->delete()) {
+            $this->setFlash('/admin/students', 'Student deleted successfully', 'success');
+        } else {
+            $this->setFlash('/admin/students', 'Failed to delete student', 'error');
+        }
+        header('Location: /admin/students');
+        exit;
+    }
+
 
     public function test()
     {

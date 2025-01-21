@@ -7,22 +7,22 @@ use Helpers\Database;
 class Document extends Content
 {
     protected $file_size;
-    protected $file_extension;
+    protected $file_ext;
 
     public static function create(Database $db, $course_id, $path, $file_size, $file_extension, $title, $description)
     {
         $document = new self($db);
         $content_id = $document->createContent($course_id, $path, 'document', $title, $description);
-        
+
         if ($content_id) {
-            $sql = 'INSERT INTO Documents (content_id, file_size, file_extension) 
-                    VALUES (:content_id, :file_size, :file_extension)';
+            $sql = 'INSERT INTO Documents (content_id, file_size, file_ext) 
+                    VALUES (:content_id, :file_size, :file_ext)';
             $params = [
                 ':content_id' => $content_id,
                 ':file_size' => $file_size,
-                ':file_extension' => $file_extension
+                ':file_ext' => $file_extension
             ];
-            
+
             if ($db->query($sql, $params)) {
                 return self::loadById($db, $content_id);
             }
@@ -32,7 +32,7 @@ class Document extends Content
 
     public static function loadById(Database $db, $id)
     {
-        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_extension 
+        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_ext 
                 FROM Contents 
                 JOIN Documents ON Documents.content_id = Contents.id 
                 WHERE Contents.id = :id';
@@ -49,7 +49,7 @@ class Document extends Content
 
     public static function all(Database $db)
     {
-        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_extension 
+        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_ext 
                 FROM Contents 
                 JOIN Documents ON Documents.content_id = Contents.id';
         $results = $db->fetchAll($sql);
@@ -68,7 +68,7 @@ class Document extends Content
 
     public static function allByCourseId(Database $db, $course_id)
     {
-        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_extension 
+        $sql = 'SELECT Contents.*, Documents.file_size, Documents.file_ext 
                 FROM Contents 
                 JOIN Documents ON Documents.content_id = Contents.id 
                 WHERE Contents.course_id = :course_id';
@@ -92,8 +92,11 @@ class Document extends Content
         $this->id = $data['id'];
         $this->course_id = $data['course_id'];
         $this->path = $data['path'];
+        $this->type = $data['type'];
         $this->file_size = $data['file_size'];
-        $this->file_extension = $data['file_extension'];
+        $this->file_ext = $data['file_ext'];
+        $this->title = $data['title'];
+        $this->description = $data['description'];
         $this->status = $data['status'];
         $this->created_at = $data['created_at'];
         $this->updated_at = $data['updated_at'];
@@ -128,7 +131,7 @@ class Document extends Content
 
     public function getFileExtension()
     {
-        return $this->file_extension;
+        return $this->file_ext;
     }
 
     public function updateFileSize($file_size)
@@ -162,7 +165,7 @@ class Document extends Content
 
     public static function validateSize($file)
     {
-        $max_size = 100 * 1024 * 1024; 
+        $max_size = 100 * 1024 * 1024;
         return $file['size'] <= $max_size;
     }
 
@@ -174,6 +177,16 @@ class Document extends Content
 
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return $targetPath;
+        }
+        return false;
+    }
+
+    public function delete()
+    {
+        $sql = 'DELETE FROM Documents WHERE content_id = :id';
+        $params = [':id' => $this->id];
+        if ($this->db->query($sql, $params)) {
+            return parent::deleteContent();
         }
         return false;
     }

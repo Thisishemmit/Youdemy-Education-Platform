@@ -73,6 +73,7 @@ class Thumbnail {
             return false;
         }
     }
+
     public static function create(Database $db, $courseId, $path) {
         $sql = 'INSERT INTO Thumbnails (course_id, path) VALUES (:course_id, :path)';
         $params = [':course_id' => $courseId, ':path' => $path];

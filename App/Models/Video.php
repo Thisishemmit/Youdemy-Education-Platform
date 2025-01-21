@@ -6,17 +6,18 @@ use Helpers\Database;
 
 class Video extends Content
 {
+
     protected $duration;
 
     public static function create(Database $db, $course_id, $path, $duration, $title, $description)
     {
         $video = new self($db);
         $content_id = $video->createContent($course_id, $path, 'video', $title, $description);
-        
+
         if ($content_id) {
             $sql = 'INSERT INTO Videos (content_id, duration) VALUES (:content_id, :duration)';
             $params = [':content_id' => $content_id, ':duration' => $duration];
-            
+
             if ($db->query($sql, $params)) {
                 return self::loadById($db, $content_id);
             }
@@ -85,6 +86,9 @@ class Video extends Content
     {
         $this->id = $data['id'];
         $this->course_id = $data['course_id'];
+        $this->title = $data['title'];
+        $this->type = $data['type'];
+        $this->description = $data['description'];
         $this->path = $data['path'];
         $this->duration = $data['duration'];
         $this->status = $data['status'];
@@ -148,7 +152,7 @@ class Video extends Content
 
     public static function validateSize($file)
     {
-        $max_size = 100 * 1024 * 1024; 
+        $max_size = 100 * 1024 * 1024;
         return $file['size'] <= $max_size;
     }
 
@@ -160,6 +164,16 @@ class Video extends Content
 
         if (move_uploaded_file($file['tmp_name'], $targetPath)) {
             return $targetPath;
+        }
+        return false;
+    }
+
+    public function delete()
+    {
+        $sql = 'DELETE FROM Videos WHERE content_id = :content_id';
+        $params = [':content_id' => $this->id];
+        if ($this->db->query($sql, $params)) {
+            return parent::deleteContent();
         }
         return false;
     }

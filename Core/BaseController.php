@@ -16,6 +16,11 @@ class BaseController
 
     protected function render(string $view, array $data = []): void
     {
+        $data['auth'] = [
+            'check' => Auth::check(),
+            'user' => Auth::user()
+        ];
+
         $viewPath = "../App/Views/{$view}.php";
         if (file_exists($viewPath)) {
             extract($data);

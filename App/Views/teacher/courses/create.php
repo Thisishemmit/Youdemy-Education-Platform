@@ -24,8 +24,8 @@
 
                 <?php if ($this->hasFlash('/teacher/courses/create')): ?>
                     <?php
-                        $flash = $this->getFlash('/teacher/courses/create');
-                        $bgColor = $flash['type'] === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700';
+                    $flash = $this->getFlash('/teacher/courses/create');
+                    $bgColor = $flash['type'] === 'success' ? 'bg-green-100 border-green-400 text-green-700' : 'bg-red-100 border-red-400 text-red-700';
                     ?>
                     <div class="<?php echo $bgColor; ?> border px-4 py-3 rounded relative mb-6" role="alert">
                         <span class="block sm:inline"><?php echo $flash['message']; ?></span>
@@ -38,11 +38,11 @@
                             <label class="block text-sm font-medium text-gray-700 mb-3">Content Type</label>
                             <div class="flex gap-4">
                                 <label class="inline-flex items-center">
-                                    <input type="radio" name="content_type" value="video" class="form-radio text-[#1fda92]" >
+                                    <input type="radio" name="content_type" value="video" class="form-radio text-[#1fda92]">
                                     <span class="ml-2">Video</span>
                                 </label>
                                 <label class="inline-flex items-center">
-                                    <input type="radio" name="content_type" value="document" class="form-radio text-[#1fda92]" >
+                                    <input type="radio" name="content_type" value="document" class="form-radio text-[#1fda92]">
                                     <span class="ml-2">Document</span>
                                 </label>
                             </div>
@@ -52,19 +52,19 @@
                             <div>
                                 <label for="course_title" class="block text-sm font-medium text-gray-700 mb-1">Course Title</label>
                                 <input type="text" id="course_title" name="course_title"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
                             </div>
                             <div>
                                 <label for="course_description" class="block text-sm font-medium text-gray-700 mb-1">Course Description</label>
                                 <textarea id="course_description" name="course_description" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"></textarea>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"></textarea>
                             </div>
                         </div>
 
                         <div>
                             <label for="category" class="block text-sm font-medium text-gray-700 mb-1">Course Category</label>
                             <select id="category" name="category_id"
-                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
+                                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
                                 <option value="">Select a category</option>
                                 <?php foreach ($categories as $category): ?>
                                     <option value="<?php echo $category->getId(); ?>">
@@ -78,8 +78,8 @@
                             <label class="block text-sm font-medium text-gray-700 mb-3">Course Tags</label>
                             <div class="relative">
                                 <input type="text" id="tagInput"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"
-                                       placeholder="Type to search tags...">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"
+                                    placeholder="Type to search tags...">
                                 <div id="tagSuggestions" class="hidden absolute z-10 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg">
                                     <!-- Suggestions will be populated here -->
                                 </div>
@@ -96,7 +96,7 @@
                                 <label class="block mb-4">
                                     <span class="sr-only">Choose thumbnail</span>
                                     <input type="file" name="thumbnail" accept="image/jpeg,image/png"
-                                           class="block w-full text-sm text-gray-500
+                                        class="block w-full text-sm text-gray-500
                                                   file:mr-4 file:py-2 file:px-4
                                                   file:rounded-lg file:border-0
                                                   file:text-sm file:font-semibold
@@ -115,12 +115,12 @@
                             <div>
                                 <label for="content_title" class="block text-sm font-medium text-gray-700 mb-1">Content Title</label>
                                 <input type="text" id="content_title" name="content_title"
-                                       class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]">
                             </div>
                             <div>
                                 <label for="content_description" class="block text-sm font-medium text-gray-700 mb-1">Content Description</label>
                                 <textarea id="content_description" name="content_description" rows="4"
-                                          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"></textarea>
+                                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#1fda92]"></textarea>
                             </div>
                         </div>
 
@@ -130,7 +130,7 @@
                                 <label class="block mb-4">
                                     <span class="sr-only">Choose content file</span>
                                     <input type="file" name="content_file" id="content_file"
-                                           class="block w-full text-sm text-gray-500
+                                        class="block w-full text-sm text-gray-500
                                                   file:mr-4 file:py-2 file:px-4
                                                   file:rounded-lg file:border-0
                                                   file:text-sm file:font-semibold
@@ -146,11 +146,11 @@
 
                         <div class="flex justify-end gap-3">
                             <a href="/teacher/courses"
-                               class="px-4 py-2 text-gray-600 hover:text-gray-800">
+                                class="px-4 py-2 text-gray-600 hover:text-gray-800">
                                 Cancel
                             </a>
                             <button type="submit"
-                                    class="bg-[#1fda92] text-[#252525] px-4 py-2 rounded-lg font-semibold hover:bg-opacity-90">
+                                class="bg-[#1fda92] text-[#252525] px-4 py-2 rounded-lg font-semibold hover:bg-opacity-90">
                                 Create Course
                             </button>
                         </div>
@@ -175,9 +175,9 @@
             });
         });
 
-        const tags = <?php echo json_encode(array_map(function($tag) {
-            return ['id' => $tag->getId(), 'name' => $tag->getName()];
-        }, $tags)); ?>;
+        const tags = <?php echo json_encode(array_map(function ($tag) {
+                            return ['id' => $tag->getId(), 'name' => $tag->getName()];
+                        }, $tags)); ?>;
 
         const tagInput = document.getElementById('tagInput');
         const tagSuggestions = document.getElementById('tagSuggestions');
@@ -240,4 +240,5 @@
         tagInput.addEventListener('focus', () => showSuggestions(tagInput.value));
     </script>
 </body>
+
 </html>

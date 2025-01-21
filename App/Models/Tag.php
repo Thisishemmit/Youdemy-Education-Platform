@@ -1,45 +1,56 @@
 <?php
+
 namespace App\Models;
+
 use Helpers\Database;
 
-class Tag {
+class Tag
+{
     private $id;
     private $name;
     private $created_at;
     private $updated_at;
     private $db;
 
-    public function __construct(Database $db) {
+    public function __construct(Database $db)
+    {
         $this->db = $db;
     }
 
-    public function getId() {
+    public function getId()
+    {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName()
+    {
         return $this->name;
     }
 
-    public function getCreatedAt() {
+    public function getCreatedAt()
+    {
         return $this->created_at;
     }
 
-    public function getUpdatedAt() {
+    public function getUpdatedAt()
+    {
         return $this->updated_at;
     }
 
-    public function setName($name) {
+    public function setName($name)
+    {
         $this->name = $name;
     }
 
-    public function hydrate($data) {
+    public function hydrate($data)
+    {
         foreach ($data as $key => $value) {
             $this->$key = $value;
         }
     }
 
-    public function save() {
+    public function save()
+    {
         if (isset($this->id)) {
             $sql = 'UPDATE Tags SET name = :name, updated_at = NOW() WHERE id = :id';
             $params = [
@@ -53,19 +64,21 @@ class Tag {
         return $this->db->query($sql, $params);
     }
 
-    public function delete() {
+    public function delete()
+    {
         if (!isset($this->id)) return false;
-        
+
         // First remove all course-tag associations
         $sql = 'DELETE FROM CourseTags WHERE tag_id = :id';
         $this->db->query($sql, [':id' => $this->id]);
-        
+
         // Then delete the tag
         $sql = 'DELETE FROM Tags WHERE id = :id';
         return $this->db->query($sql, [':id' => $this->id]);
     }
 
-    public static function loadById(Database $db, $id) {
+    public static function loadById(Database $db, $id)
+    {
         $sql = 'SELECT * FROM Tags WHERE id = :id';
         $params = [':id' => $id];
         $result = $db->fetch($sql, $params);
@@ -77,7 +90,8 @@ class Tag {
         return false;
     }
 
-    public static function all(Database $db) {
+    public static function all(Database $db)
+    {
         $sql = 'SELECT * FROM Tags ORDER BY name ASC';
         $result = $db->fetchAll($sql);
         if ($result !== false) {
@@ -92,14 +106,16 @@ class Tag {
         return [];
     }
 
-    public static function exists(Database $db, $name) {
+    public static function exists(Database $db, $name)
+    {
         $sql = 'SELECT COUNT(*) FROM Tags WHERE LOWER(name) = LOWER(:name)';
         $params = [':name' => $name];
         $result = $db->fetch($sql, $params);
         return $result !== false && $result['COUNT(*)'] > 0;
     }
 
-    public static function create(Database $db, $name) {
+    public static function create(Database $db, $name)
+    {
         if (self::exists($db, $name)) {
             return false;
         }
@@ -110,5 +126,22 @@ class Tag {
             return $tag;
         }
         return false;
+    }
+
+    public static function allByCourseId(Database $db, $course_id)
+    {
+        $sql = 'SELECT Tags.* FROM Tags JOIN CourseTags ON CourseTags.tag_id = Tags.id WHERE CourseTags.course_id = :course_id';
+        $params = [':course_id' => $course_id];
+        $result = $db->fetchAll($sql, $params);
+        if ($result !== false) {
+            $tags = [];
+            foreach ($result as $data) {
+                $tag = new self($db);
+                $tag->hydrate($data);
+                $tags[] = $tag;
+            }
+            return $tags;
+        }
+        return [];
     }
 }
