@@ -41,6 +41,12 @@ class AuthController extends BaseController
             exit;
         }
 
+        if (!$user->isActive()) {
+            $this->setFlash('login', 'User is not active', 'error');
+            header('Location: /login');
+            exit;
+        }
+
         if (!$user->verifyPassword($password)) {
             $this->setFlash('login', 'Invalid credentials', 'error');
             header('Location: /login');

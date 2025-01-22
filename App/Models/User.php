@@ -240,5 +240,9 @@ class User {
             return false;
         }
     }
+
+    public function isActive(){
+        return $this->status === 'active';
+    }
 }
 
