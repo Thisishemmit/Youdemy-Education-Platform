@@ -56,7 +56,7 @@
                         <div class="relative">
                             <div class="absolute w-full h-full bg-[#252525] rounded-xl top-2 left-2"></div>
                             <img src="/assets/images/landing.jpg" alt="Students learning"
-                                class="relative z-10 w-full rounded-xl border-2 border-[#252525]">
+                                class="relative z-10 w-full rounded-xl border-2 border-[#252525] grayscale">
                         </div>
                     </div>
                 </div>
